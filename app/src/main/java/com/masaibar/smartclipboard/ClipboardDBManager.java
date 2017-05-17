@@ -6,6 +6,9 @@ import android.text.TextUtils;
 import com.masaibar.smartclipboard.entities.ClipboardData;
 import com.masaibar.smartclipboard.utils.ThreadUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClipboardDBManager {
     private Context mContext;
 
@@ -28,5 +31,12 @@ public class ClipboardDBManager {
                 App.getOrma(mContext).insertIntoClipboardData(data);
             }
         });
+    }
+
+    public ArrayList<ClipboardData> getAll() {
+        List<ClipboardData> datas =
+                App.getOrma(mContext).selectFromClipboardData().toList();
+
+        return new ArrayList<>(datas);
     }
 }
