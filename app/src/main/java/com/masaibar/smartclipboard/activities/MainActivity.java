@@ -1,6 +1,7 @@
 package com.masaibar.smartclipboard.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.masaibar.smartclipboard.ClipboardDBManager;
-import com.masaibar.smartclipboard.ClipboardObserverService;
+import com.masaibar.smartclipboard.services.ClipboardObserverService;
 import com.masaibar.smartclipboard.HistoryAdapter;
 import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.ClipboardData;
@@ -19,6 +20,12 @@ import com.masaibar.smartclipboard.utils.ClipboardUtil;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static Intent getLaunchIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

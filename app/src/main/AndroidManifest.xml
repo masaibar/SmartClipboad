@@ -20,7 +20,7 @@
         </activity>
 
         <service
-            android:name=".ClipboardObserverService"
+            android:name=".services.ClipboardObserverService"
             android:exported="false"/>
 
         <activity android:name=".activities.DetailTextActivity">
