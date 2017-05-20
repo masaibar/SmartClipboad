@@ -33,18 +33,21 @@ public class ClipboardDBManager {
         });
     }
 
-    public void deleteAt(final long time) {
+    public void deleteAt(final long id) {
         ThreadUtil.runOnBackgroundThread(new Runnable() {
             @Override
             public void run() {
-                App.getOrma(mContext).deleteFromClipboardData().timeEq(time).execute();
+                App.getOrma(mContext).deleteFromClipboardData().idEq(id).execute();
             }
         });
     }
 
+    /**
+     * todo 取得件数の制限をする
+     */
     public ArrayList<ClipboardData> getAll() {
         List<ClipboardData> datas =
-                App.getOrma(mContext).selectFromClipboardData().orderByTimeDesc().toList();
+                App.getOrma(mContext).selectFromClipboardData().orderByIdDesc().toList();
 
         return new ArrayList<>(datas);
     }

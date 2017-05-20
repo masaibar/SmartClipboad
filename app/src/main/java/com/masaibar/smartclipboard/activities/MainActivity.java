@@ -8,14 +8,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
 
 import com.masaibar.smartclipboard.ClipboardDBManager;
 import com.masaibar.smartclipboard.ClipboardObserverService;
 import com.masaibar.smartclipboard.HistoryAdapter;
 import com.masaibar.smartclipboard.R;
-import com.masaibar.smartclipboard.RecyclerItemClickListener;
 import com.masaibar.smartclipboard.entities.ClipboardData;
+import com.masaibar.smartclipboard.utils.ClipboardUtil;
 
 import java.util.ArrayList;
 
@@ -42,17 +41,21 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<ClipboardData> datas =
                 new ClipboardDBManager(getApplicationContext()).getAll();
-        final HistoryAdapter adapter = new HistoryAdapter(context, datas);
+        final HistoryAdapter adapter =
+                new HistoryAdapter(context, datas, new HistoryAdapter.OnClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        DetailTextActivity.start(context, datas.get(position).text);
+                    }
+
+                    @Override
+                    public void onCopyClick(int position) {
+                        new ClipboardUtil(context).copyToClipboard(datas.get(position).text);
+                    }
+                });
 
         recyclerView.addItemDecoration(getDecoration(context));
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
-                context, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                DetailTextActivity.start(context, datas.get(position).text);
-            }
-        }));
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(
@@ -63,13 +66,15 @@ public class MainActivity extends AppCompatActivity {
                             RecyclerView recyclerView,
                             RecyclerView.ViewHolder viewHolder,
                             RecyclerView.ViewHolder target) {
+
+                        //todo 並び替え実装(?)
                         return false;
                     }
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                         int fromPos = viewHolder.getAdapterPosition();
-                        new ClipboardDBManager(context).deleteAt(datas.get(fromPos).time);
+                        new ClipboardDBManager(context).deleteAt(datas.get(fromPos).id);
                         datas.remove(fromPos);
                         adapter.notifyItemRemoved(fromPos);
                     }

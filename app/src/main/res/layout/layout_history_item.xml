@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="80dp"
-              android:background="#EEEEEEEE"
-              android:orientation="vertical"
-              android:padding="8dp">
+<LinearLayout
+    android:id="@+id/linear_history_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="#EEEEEEEE"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/text_date"
@@ -33,7 +35,6 @@
             tools:text="hogehoge"/>
 
         <ImageView
-            android:clickable="true"
             android:id="@+id/image_copy"
             android:layout_width="36dp"
             android:layout_height="36dp"
