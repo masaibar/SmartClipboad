@@ -1,4 +1,4 @@
-package com.masaibar.smartclipboard;
+package com.masaibar.smartclipboard.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,8 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.Toast;
 
+import com.masaibar.smartclipboard.ClipboardDBManager;
+import com.masaibar.smartclipboard.ClipboardObserverService;
+import com.masaibar.smartclipboard.HistoryAdapter;
+import com.masaibar.smartclipboard.R;
+import com.masaibar.smartclipboard.RecyclerItemClickListener;
 import com.masaibar.smartclipboard.entities.ClipboardData;
 
 import java.util.ArrayList;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(context, datas.get(position).text, Toast.LENGTH_SHORT).show();
+                DetailTextActivity.start(context, datas.get(position).text);
             }
         }));
 
@@ -55,7 +59,10 @@ public class MainActivity extends AppCompatActivity {
                         ItemTouchHelper.UP | ItemTouchHelper.DOWN,
                         ItemTouchHelper.RIGHT) {
                     @Override
-                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    public boolean onMove(
+                            RecyclerView recyclerView,
+                            RecyclerView.ViewHolder viewHolder,
+                            RecyclerView.ViewHolder target) {
                         return false;
                     }
 

@@ -16,15 +16,30 @@
         android:textSize="12sp"
         tools:text="mm/dd HH:MM"/>
 
-    <TextView
-        android:id="@+id/text_content"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        tools:text="hogehoge"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            tools:text="hogehoge"/>
+
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/image_copy"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/ic_content_copy_black_36dp"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/text_count"

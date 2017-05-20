@@ -7,7 +7,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.masaibar.smartclipboard.utils.DebugUtil;
+import com.masaibar.smartclipboard.utils.ClipboardUtil;
+
 
 public class ClipboardObserverService extends Service {
 
@@ -29,16 +30,15 @@ public class ClipboardObserverService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        manager.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
-            @Override
-            public void onPrimaryClipChanged() {
-                String text = new ClipboardTextGetter(getApplicationContext()).getText();
-                DebugUtil.log("!!!", String.format("result: %s", text));
+        final Context context = getApplicationContext();
 
-                //todo insert database
-                new ClipboardDBManager(getApplicationContext()).save(text);
-            }
-        });
+        new ClipboardUtil(context)
+                .addClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
+                    @Override
+                    public void onPrimaryClipChanged() {
+                        String text = new ClipboardTextGetter(context).getText();
+                        new ClipboardDBManager(context).save(text);
+                    }
+                });
     }
 }
