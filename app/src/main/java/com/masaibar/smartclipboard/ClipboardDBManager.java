@@ -33,6 +33,15 @@ public class ClipboardDBManager {
         });
     }
 
+    public void deleteAt(final long time) {
+        ThreadUtil.runOnBackgroundThread(new Runnable() {
+            @Override
+            public void run() {
+                App.getOrma(mContext).deleteFromClipboardData().timeEq(time).execute();
+            }
+        });
+    }
+
     public ArrayList<ClipboardData> getAll() {
         List<ClipboardData> datas =
                 App.getOrma(mContext).selectFromClipboardData().orderByTimeDesc().toList();

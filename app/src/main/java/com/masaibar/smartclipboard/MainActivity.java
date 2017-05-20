@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<ClipboardData> datas =
                 new ClipboardDBManager(getApplicationContext()).getAll();
-        HistoryAdapter adapter = new HistoryAdapter(context, datas);
+        final HistoryAdapter adapter = new HistoryAdapter(context, datas);
 
         recyclerView.addItemDecoration(getDecoration(context));
         recyclerView.setAdapter(adapter);
@@ -48,6 +49,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context, datas.get(position).text, Toast.LENGTH_SHORT).show();
             }
         }));
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(
+                        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        int fromPos = viewHolder.getAdapterPosition();
+                        new ClipboardDBManager(context).deleteAt(datas.get(fromPos).time);
+                        datas.remove(fromPos);
+                        adapter.notifyItemRemoved(fromPos);
+                    }
+                }
+        );
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     private DividerItemDecoration getDecoration(Context c) {
