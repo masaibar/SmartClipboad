@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
 
 import com.masaibar.smartclipboard.entities.ClipboardData;
 
@@ -29,15 +31,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        Context context = getApplicationContext();
+        final Context context = getApplicationContext();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        ArrayList<ClipboardData> datas = new ClipboardDBManager(getApplicationContext()).getAll();
+        final ArrayList<ClipboardData> datas =
+                new ClipboardDBManager(getApplicationContext()).getAll();
         HistoryAdapter adapter = new HistoryAdapter(context, datas);
 
         recyclerView.addItemDecoration(getDecoration(context));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
+                context, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(context, datas.get(position).text, Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     private DividerItemDecoration getDecoration(Context c) {

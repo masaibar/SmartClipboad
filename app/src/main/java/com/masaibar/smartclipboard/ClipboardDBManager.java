@@ -35,7 +35,7 @@ public class ClipboardDBManager {
 
     public ArrayList<ClipboardData> getAll() {
         List<ClipboardData> datas =
-                App.getOrma(mContext).selectFromClipboardData().toList();
+                App.getOrma(mContext).selectFromClipboardData().orderByTimeDesc().toList();
 
         return new ArrayList<>(datas);
     }
