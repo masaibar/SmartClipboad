@@ -1,8 +1,10 @@
 package com.masaibar.smartclipboard;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,7 +39,17 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<ClipboardData> datas = new ClipboardDBManager(getApplicationContext()).getAll();
         HistoryAdapter adapter = new HistoryAdapter(context, datas);
+
+        recyclerView.addItemDecoration(getDecoration(context));
         recyclerView.setAdapter(adapter);
+    }
+
+    private DividerItemDecoration getDecoration(Context c) {
+        DividerItemDecoration decoration =
+                new DividerItemDecoration(c, new LinearLayoutManager(c).getOrientation());
+        decoration.setDrawable(ContextCompat.getDrawable(c, R.drawable.shape_divider));
+
+        return decoration;
     }
 
     public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
