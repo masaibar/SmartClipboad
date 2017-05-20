@@ -37,7 +37,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
 
         final ClipboardData data = mDatas.get(position);
-        holder.mViewRoot.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
@@ -70,7 +70,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        View mViewRoot;
         TextView mTextContent;
         TextView mTextDate;
         TextView mTextCount;
@@ -78,7 +77,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         private ViewHolder(View itemView) {
             super(itemView);
-            mViewRoot = itemView.findViewById(R.id.linear_history_item);
             mTextDate = (TextView) itemView.findViewById(R.id.text_date);
             mTextContent = (TextView) itemView.findViewById(R.id.text_content);
             mTextCount = (TextView) itemView.findViewById(R.id.text_count);
