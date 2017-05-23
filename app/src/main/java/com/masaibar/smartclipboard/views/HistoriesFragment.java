@@ -19,14 +19,9 @@ import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.ClipboardData;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class HistoriesFragment extends Fragment {
-
-    private static final String ARG_TEXT = "ARG_TEXT";
-
-    public HistoriesFragment() {
-    }
 
     public static HistoriesFragment newInstance() {
 
@@ -37,6 +32,11 @@ public class HistoriesFragment extends Fragment {
         return fragment;
     }
 
+    private HistoryAdapter mAdapter;
+
+    public HistoriesFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -45,28 +45,35 @@ public class HistoriesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mAdapter != null) {
+            mAdapter.deleteList(getContext());
+        }
+    }
+
     private void setupRecyclerView(View view) {
         final Context context = getContext();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        final ArrayList<ClipboardData> datas =
+        final List<ClipboardData> datas =
                 new ClipboardDBManager(getContext()).getAll();
-        final HistoryAdapter adapter =
-                new HistoryAdapter(context, datas, new HistoryAdapter.OnClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        DetailTextActivity.start(context, datas.get(position).text);
-                    }
+        mAdapter = new HistoryAdapter(context, datas, new HistoryAdapter.OnClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                DetailTextActivity.start(context, datas.get(position).text);
+            }
 
-                    @Override
-                    public void onCopyClick(int position) {
-                        new ClipboardUtil(context).copyToClipboard(datas.get(position).text);
-                    }
-                });
+            @Override
+            public void onCopyClick(int position) {
+                new ClipboardUtil(context).copyToClipboard(datas.get(position).text);
+            }
+        });
 
         recyclerView.addItemDecoration(getDecoration(context));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(
@@ -84,10 +91,7 @@ public class HistoriesFragment extends Fragment {
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        int fromPos = viewHolder.getAdapterPosition();
-                        new ClipboardDBManager(context).deleteAt(datas.get(fromPos).id);
-                        datas.remove(fromPos);
-                        adapter.notifyItemRemoved(fromPos);
+                        mAdapter.onItemRemove(viewHolder, recyclerView);
                     }
                 }
         );

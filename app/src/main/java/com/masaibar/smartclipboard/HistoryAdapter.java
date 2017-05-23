@@ -1,6 +1,7 @@
 package com.masaibar.smartclipboard;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.masaibar.smartclipboard.entities.ClipboardData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
@@ -21,13 +23,40 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     private LayoutInflater mInflater;
-    private ArrayList<ClipboardData> mDatas;
+    private List<ClipboardData> mDatas;
+    private List<ClipboardData> mDatasToDelete;
     private OnClickListener mListener;
 
-    public HistoryAdapter(Context context, ArrayList<ClipboardData> datas, OnClickListener listener) {
+    public HistoryAdapter(Context context, List<ClipboardData> datas, OnClickListener listener) {
         mInflater = LayoutInflater.from(context);
-        mDatas = datas;
+        mDatas = new ArrayList<>(datas);
+        mDatasToDelete = new ArrayList<>();
         mListener = listener;
+    }
+
+    public void onItemRemove(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
+        final int position = viewHolder.getAdapterPosition();
+        final ClipboardData data = mDatas.get(position);
+
+        Snackbar.make(recyclerView, "removed", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDatas.add(position, data);
+                        notifyItemInserted(position);
+                        mDatasToDelete.remove(data);
+                    }
+                }).show();
+        mDatas.remove(position);
+        notifyItemRemoved(position);
+        mDatasToDelete.add(data);
+    }
+
+    public void deleteList(Context context) {
+        ClipboardDBManager dbManager = new ClipboardDBManager(context);
+        for (ClipboardData data : mDatasToDelete) {
+            dbManager.deleteAt(data.id);
+        }
     }
 
     @Override
@@ -57,7 +86,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             }
         });
     }
-
 
     @Override
     public int getItemCount() {
