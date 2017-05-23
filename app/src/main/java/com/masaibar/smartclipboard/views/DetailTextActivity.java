@@ -1,10 +1,9 @@
-package com.masaibar.smartclipboard.activities;
+package com.masaibar.smartclipboard.views;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.masaibar.smartclipboard.R;

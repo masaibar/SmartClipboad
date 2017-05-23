@@ -1,4 +1,4 @@
-package com.masaibar.smartclipboard.activities;
+package com.masaibar.smartclipboard.views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,18 +11,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.masaibar.smartclipboard.ClipboardDBManager;
-import com.masaibar.smartclipboard.services.ClipboardObserverService;
 import com.masaibar.smartclipboard.HistoryAdapter;
 import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.ClipboardData;
+import com.masaibar.smartclipboard.services.ClipboardObserverService;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
     public static Intent getLaunchIntent(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivity2.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         ClipboardObserverService.start(this);
     }
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         ItemTouchHelper touchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(
                         ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                        ItemTouchHelper.RIGHT) {
+                        ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
                     @Override
                     public boolean onMove(
                             RecyclerView recyclerView,
