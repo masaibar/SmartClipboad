@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.masaibar.smartclipboard.ClipboardDBManager;
 import com.masaibar.smartclipboard.HistoryAdapter;
 import com.masaibar.smartclipboard.R;
-import com.masaibar.smartclipboard.entities.ClipboardData;
+import com.masaibar.smartclipboard.entities.HistoryData;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class HistoriesFragment extends Fragment {
                 (RecyclerView) view.findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        final List<ClipboardData> datas =
+        final List<HistoryData> datas =
                 new ClipboardDBManager(getContext()).getAll();
         mAdapter = new HistoryAdapter(context, datas, new HistoryAdapter.OnClickListener() {
             @Override

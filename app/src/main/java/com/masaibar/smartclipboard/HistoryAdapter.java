@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.masaibar.smartclipboard.entities.ClipboardData;
+import com.masaibar.smartclipboard.entities.HistoryData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +23,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     private LayoutInflater mInflater;
-    private List<ClipboardData> mDatas;
-    private List<ClipboardData> mDatasToDelete;
+    private List<HistoryData> mDatas;
+    private List<HistoryData> mDatasToDelete;
     private OnClickListener mListener;
 
-    public HistoryAdapter(Context context, List<ClipboardData> datas, OnClickListener listener) {
+    public HistoryAdapter(Context context, List<HistoryData> datas, OnClickListener listener) {
         mInflater = LayoutInflater.from(context);
         mDatas = new ArrayList<>(datas);
         mDatasToDelete = new ArrayList<>();
@@ -36,7 +36,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public void onItemRemove(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
         final int position = viewHolder.getAdapterPosition();
-        final ClipboardData data = mDatas.get(position);
+        final HistoryData data = mDatas.get(position);
 
         Snackbar.make(recyclerView, "removed", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
@@ -54,7 +54,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public void deleteList(Context context) {
         ClipboardDBManager dbManager = new ClipboardDBManager(context);
-        for (ClipboardData data : mDatasToDelete) {
+        for (HistoryData data : mDatasToDelete) {
             dbManager.deleteAt(data.id);
         }
     }
@@ -65,7 +65,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             return;
         }
 
-        final ClipboardData data = mDatas.get(position);
+        final HistoryData data = mDatas.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
