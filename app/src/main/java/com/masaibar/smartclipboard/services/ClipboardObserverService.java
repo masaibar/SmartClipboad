@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.masaibar.smartclipboard.ClipboardDBManager;
 import com.masaibar.smartclipboard.ClipboardTextGetter;
@@ -40,6 +41,10 @@ public class ClipboardObserverService extends Service {
                     @Override
                     public void onPrimaryClipChanged() {
                         String text = new ClipboardTextGetter(context).getText();
+                        if (TextUtils.isEmpty(text)) {
+                            return;
+                        }
+
                         new ClipboardDBManager(context).save(text);
                         new ResidentNotification(context)
                                 .notifyIfNeeded(String.valueOf(text.length()), text);
