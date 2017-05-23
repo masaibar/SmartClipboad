@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -39,7 +37,8 @@ public class HistoriesFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_histories, container, false);
         setupRecyclerView(view);
         return view;
@@ -55,7 +54,8 @@ public class HistoriesFragment extends Fragment {
 
     private void setupRecyclerView(View view) {
         final Context context = getContext();
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_history);
+        final RecyclerView recyclerView =
+                (RecyclerView) view.findViewById(R.id.recycler_view_history);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         final List<ClipboardData> datas =
@@ -72,7 +72,7 @@ public class HistoriesFragment extends Fragment {
             }
         });
 
-        recyclerView.addItemDecoration(getDecoration(context));
+        recyclerView.addItemDecoration(new Divider(context).get());
         recyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(
@@ -96,13 +96,5 @@ public class HistoriesFragment extends Fragment {
                 }
         );
         touchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    private DividerItemDecoration getDecoration(Context c) {
-        DividerItemDecoration decoration =
-                new DividerItemDecoration(c, new LinearLayoutManager(c).getOrientation());
-        decoration.setDrawable(ContextCompat.getDrawable(c, R.drawable.shape_divider));
-
-        return decoration;
     }
 }
