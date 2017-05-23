@@ -1,5 +1,7 @@
 package com.masaibar.smartclipboard.views;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,13 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 public class MainActivity extends AppCompatActivity {
+
+    //todo type入れる？
+    public static Intent getLaunchIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

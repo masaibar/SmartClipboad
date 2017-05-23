@@ -1,17 +1,17 @@
 <tabs>
     <tab
-        icon="@drawable/ic_favorite_black_24dp"
-        id="@+id/tab_histories"
         barColorWhenSelected="#FF0000"
+        icon="@drawable/ic_history_black_24dp"
+        id="@+id/tab_histories"
         title="Histories"/>
     <tab
-        icon="@drawable/ic_history_black_24dp"
-        id="@+id/tab_favorites"
         barColorWhenSelected="#00FF00"
+        icon="@drawable/ic_favorite_black_24dp"
+        id="@+id/tab_favorites"
         title="Favorites"/>
     <tab
+        barColorWhenSelected="#0000FF"
         icon="@drawable/ic_settings_black_24dp"
         id="@+id/tab_settings"
-        barColorWhenSelected="#0000FF"
         title="Settings"/>
 </tabs>

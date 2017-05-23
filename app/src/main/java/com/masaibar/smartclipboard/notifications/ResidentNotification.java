@@ -9,7 +9,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 import com.masaibar.smartclipboard.R;
-import com.masaibar.smartclipboard.views.MainActivity2;
+import com.masaibar.smartclipboard.views.MainActivity;
 
 public class ResidentNotification {
 
@@ -36,7 +36,7 @@ public class ResidentNotification {
                         .setContentIntent(PendingIntent.getActivity(
                                 mContext,
                                 ID_RESIDENT_NOTIFICAION,
-                                MainActivity2.getLaunchIntent(mContext),
+                                MainActivity.getLaunchIntent(mContext),
                                 PendingIntent.FLAG_CANCEL_CURRENT)
                         );
 
