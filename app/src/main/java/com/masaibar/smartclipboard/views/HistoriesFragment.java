@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.masaibar.smartclipboard.FavoriteDBManager;
 import com.masaibar.smartclipboard.HistoryDBManager;
 import com.masaibar.smartclipboard.HistoryAdapter;
 import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.HistoryData;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
+import com.masaibar.smartclipboard.utils.DebugUtil;
 
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class HistoriesFragment extends Fragment {
         }
     }
 
-    private void setupRecyclerView(View view) {
+    private void setupRecyclerView(final View view) {
         final Context context = getContext();
         final RecyclerView recyclerView =
                 (RecyclerView) view.findViewById(R.id.recycler_view_history);
@@ -64,6 +66,11 @@ public class HistoriesFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 DetailTextActivity.start(context, datas.get(position).text);
+            }
+
+            @Override
+            public void onItemLongClick(int position) {
+                DebugUtil.log("!!!", "long");
             }
 
             @Override
@@ -90,7 +97,20 @@ public class HistoriesFragment extends Fragment {
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        mAdapter.onItemRemove(viewHolder, recyclerView);
+                        switch (direction) {
+                            case ItemTouchHelper.LEFT:
+                                mAdapter.onItemRemove(viewHolder, recyclerView);
+                                break;
+
+                            //todo とりあえず暫定対応
+                            case ItemTouchHelper.RIGHT:
+                                String text = datas.get(viewHolder.getAdapterPosition()).text;
+                                new FavoriteDBManager(getContext()).save(text);
+                                break;
+
+                                default:
+                                    break;
+                        }
                     }
                 }
         );

@@ -19,6 +19,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public interface OnClickListener {
         void onItemClick(int position);
 
+        void onItemLongClick(int position);
+
         void onCopyClick(int position);
     }
 
@@ -66,7 +68,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
 
         final HistoryData data = mDatas.get(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        View itemView = holder.itemView;
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemLongClick(position);
+                }
+                return true;
+            }
+        });
+        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
