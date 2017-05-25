@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.masaibar.smartclipboard.ClipboardDBManager;
+import com.masaibar.smartclipboard.HistoryDBManager;
 import com.masaibar.smartclipboard.HistoryAdapter;
 import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.HistoryData;
@@ -59,7 +59,7 @@ public class HistoriesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         final List<HistoryData> datas =
-                new ClipboardDBManager(getContext()).getAll();
+                new HistoryDBManager(getContext()).getAll();
         mAdapter = new HistoryAdapter(context, datas, new HistoryAdapter.OnClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -77,7 +77,7 @@ public class HistoriesFragment extends Fragment {
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(
-                        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        0,
                         ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
                     @Override
                     public boolean onMove(
@@ -85,7 +85,6 @@ public class HistoriesFragment extends Fragment {
                             RecyclerView.ViewHolder viewHolder,
                             RecyclerView.ViewHolder target) {
 
-                        //todo 並び替え実装(?)
                         return false;
                     }
 

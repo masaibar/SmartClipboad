@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.masaibar.smartclipboard.entities.HistoryData;
+import com.masaibar.smartclipboard.entities.FavoriteData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
     public interface OnClickListener {
         void onItemClick(int position);
@@ -23,11 +23,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     private LayoutInflater mInflater;
-    private List<HistoryData> mDatas;
-    private List<HistoryData> mDatasToDelete;
+    private List<FavoriteData> mDatas;
+    private List<FavoriteData> mDatasToDelete;
     private OnClickListener mListener;
 
-    public HistoryAdapter(Context context, List<HistoryData> datas, OnClickListener listener) {
+    public FavoriteAdapter(Context context, List<FavoriteData> datas, OnClickListener listener) {
         mInflater = LayoutInflater.from(context);
         mDatas = new ArrayList<>(datas);
         mDatasToDelete = new ArrayList<>();
@@ -36,7 +36,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public void onItemRemove(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
         final int position = viewHolder.getAdapterPosition();
-        final HistoryData data = mDatas.get(position);
+        final FavoriteData data = mDatas.get(position);
 
         Snackbar.make(recyclerView, "removed", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
@@ -53,8 +53,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     public void deleteList(Context context) {
-        HistoryDBManager dbManager = new HistoryDBManager(context);
-        for (HistoryData data : mDatasToDelete) {
+        FavoriteDBManager dbManager = new FavoriteDBManager(context);
+        for (FavoriteData data : mDatasToDelete) {
             dbManager.deleteAt(data.id);
         }
     }
@@ -65,7 +65,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             return;
         }
 
-        final HistoryData data = mDatas.get(position);
+        final FavoriteData data = mDatas.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,7 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.masaibar.smartclipboard.ClipboardDBManager;
+import com.masaibar.smartclipboard.HistoryDBManager;
 import com.masaibar.smartclipboard.ClipboardTextGetter;
 import com.masaibar.smartclipboard.notifications.ResidentNotification;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
@@ -45,7 +45,7 @@ public class ClipboardObserverService extends Service {
                             return;
                         }
 
-                        new ClipboardDBManager(context).save(text);
+                        new HistoryDBManager(context).save(text);
                         new ResidentNotification(context)
                                 .notifyIfNeeded(String.valueOf(text.length()), text);
                     }
