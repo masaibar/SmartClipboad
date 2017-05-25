@@ -92,6 +92,7 @@ public class HistoriesFragment extends Fragment {
                             RecyclerView.ViewHolder viewHolder,
                             RecyclerView.ViewHolder target) {
 
+                        //do nothing
                         return false;
                     }
 

@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.masaibar.smartclipboard.FavoriteDBManager;
 import com.masaibar.smartclipboard.FavoriteAdapter;
+import com.masaibar.smartclipboard.FavoriteDBManager;
 import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.FavoriteData;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
@@ -52,7 +52,7 @@ public class FavoritesFragment extends Fragment {
         }
     }
 
-    private void setupRecyclerView(View view) {
+    private void setupRecyclerView(final View view) {
         final Context context = getContext();
         final RecyclerView recyclerView =
                 (RecyclerView) view.findViewById(R.id.recycler_view_favorite);
@@ -76,22 +76,22 @@ public class FavoritesFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(
-                        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                        ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
                     @Override
                     public boolean onMove(
                             RecyclerView recyclerView,
                             RecyclerView.ViewHolder viewHolder,
                             RecyclerView.ViewHolder target) {
 
-                        //todo 並び替え実装(?)
+                        mAdapter.notifyItemMoved(
+                                viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
                         return false;
                     }
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        mAdapter.onItemRemove(viewHolder, recyclerView);
+                        //todo 横スワイプはしない(削除はなんとかする)
                     }
                 }
         );

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.masaibar.smartclipboard.entities.FavoriteData;
+import com.masaibar.smartclipboard.utils.DebugUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         mDatas = new ArrayList<>(datas);
         mDatasToDelete = new ArrayList<>();
         mListener = listener;
+    }
+
+    public void onItemMove(int fromPosition, int toPosition) {
+        notifyItemMoved(fromPosition, toPosition);
+        DebugUtil.log("!!!", String.format("%s => %s", fromPosition, toPosition));
+
+        //todo dbの並び替え実装
+        //todo idを詰める処理
     }
 
     public void onItemRemove(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
