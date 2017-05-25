@@ -100,7 +100,7 @@ public class HistoriesFragment extends Fragment {
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                         switch (direction) {
                             case ItemTouchHelper.LEFT:
-                                mAdapter.onItemRemove(viewHolder, recyclerView);
+                                mAdapter.onItemRemoved(viewHolder, recyclerView);
                                 break;
 
                             //todo とりあえず暫定対応

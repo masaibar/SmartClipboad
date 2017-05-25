@@ -36,7 +36,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         mListener = listener;
     }
 
-    public void onItemRemove(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
+    public void onItemRemoved(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
         final int position = viewHolder.getAdapterPosition();
         final HistoryData data = mDatas.get(position);
 

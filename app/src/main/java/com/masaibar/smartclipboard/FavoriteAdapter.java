@@ -1,7 +1,6 @@
 package com.masaibar.smartclipboard;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,30 +34,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         mListener = listener;
     }
 
-    public void onItemMove(int fromPosition, int toPosition) {
+    public void onItemMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
         DebugUtil.log("!!!", String.format("%s => %s", fromPosition, toPosition));
 
         //todo dbの並び替え実装
         //todo idを詰める処理
-    }
-
-    public void onItemRemove(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
-        final int position = viewHolder.getAdapterPosition();
-        final FavoriteData data = mDatas.get(position);
-
-        Snackbar.make(recyclerView, "removed", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDatas.add(position, data);
-                        notifyItemInserted(position);
-                        mDatasToDelete.remove(data);
-                    }
-                }).show();
-        mDatas.remove(position);
-        notifyItemRemoved(position);
-        mDatasToDelete.add(data);
     }
 
     public void deleteList(Context context) {

@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.masaibar.smartclipboard.FavoriteAdapter;
 import com.masaibar.smartclipboard.FavoriteDBManager;
+import com.masaibar.smartclipboard.FavoriteAdapter;
 import com.masaibar.smartclipboard.R;
 import com.masaibar.smartclipboard.entities.FavoriteData;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
@@ -83,7 +83,7 @@ public class FavoritesFragment extends Fragment {
                             RecyclerView.ViewHolder viewHolder,
                             RecyclerView.ViewHolder target) {
 
-                        mAdapter.notifyItemMoved(
+                        mAdapter.onItemMoved(
                                 viewHolder.getAdapterPosition(), target.getAdapterPosition());
 
                         return false;
