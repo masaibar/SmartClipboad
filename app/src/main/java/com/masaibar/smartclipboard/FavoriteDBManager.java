@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.masaibar.smartclipboard.entities.FavoriteData;
-import com.masaibar.smartclipboard.entities.OrmaDatabase;
 import com.masaibar.smartclipboard.utils.ThreadUtil;
 
 import java.util.ArrayList;
@@ -59,6 +58,20 @@ public class FavoriteDBManager extends DBManager {
     }
 
     @Override
+    public void delete(final String text) {
+        if (TextUtils.isEmpty(text)) {
+            return;
+        }
+
+        ThreadUtil.runOnBackgroundThread(new Runnable() {
+            @Override
+            public void run() {
+                getOrma().deleteFromFavoriteData().textEq(text).execute();
+            }
+        });
+    }
+
+    @Override
     public void deleteAt(final long id) {
         ThreadUtil.runOnBackgroundThread(new Runnable() {
             @Override
@@ -74,7 +87,7 @@ public class FavoriteDBManager extends DBManager {
         return new ArrayList<>(datas);
     }
 
-    private boolean isExist(String text) {
+    public boolean isExist(String text) {
         return getOrma().selectFromFavoriteData().textEq(text).toList().size() > 0;
     }
 
@@ -88,9 +101,5 @@ public class FavoriteDBManager extends DBManager {
         }
 
         return null;
-    }
-
-    private OrmaDatabase getOrma() {
-        return App.getOrma(getContext());
     }
 }

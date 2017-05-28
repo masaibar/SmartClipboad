@@ -5,19 +5,18 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.masaibar.smartclipboard.entities.HistoryData;
-import com.masaibar.smartclipboard.entities.OrmaDatabase;
 import com.masaibar.smartclipboard.utils.ThreadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryDBManager {
-    private Context mContext;
+public class HistoryDBManager extends DBManager {
 
     public HistoryDBManager(Context context) {
-        mContext = context;
+        super(context);
     }
 
+    @Override
     public void save(String text) {
         if (TextUtils.isEmpty(text)) {
             return;
@@ -35,6 +34,21 @@ public class HistoryDBManager {
         });
     }
 
+    @Override
+    public void delete(final String text) {
+        if (TextUtils.isEmpty(text)) {
+            return;
+        }
+
+        ThreadUtil.runOnBackgroundThread(new Runnable() {
+            @Override
+            public void run() {
+                getOrma().deleteFromFavoriteData().textEq(text).execute();
+            }
+        });
+    }
+
+    @Override
     public void deleteAt(final long id) {
         ThreadUtil.runOnBackgroundThread(new Runnable() {
             @Override
@@ -58,9 +72,5 @@ public class HistoryDBManager {
     public String getLatestText() {
         HistoryData data = getOrma().selectFromHistoryData().orderByIdDesc().getOrNull(0);
         return data == null ? null : data.text;
-    }
-
-    private OrmaDatabase getOrma() {
-        return App.getOrma(mContext);
     }
 }
