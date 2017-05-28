@@ -1,7 +1,6 @@
 package com.masaibar.smartclipboard;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,54 +8,42 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.masaibar.smartclipboard.entities.HistoryData;
+import com.masaibar.smartclipboard.entities.FavoriteData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
     public interface OnClickListener {
         void onItemClick(int position);
 
-        void onItemLongClick(int position);
-
         void onCopyClick(int position);
     }
 
-    private LayoutInflater mInflater;
-    private List<HistoryData> mDatas;
-    private List<HistoryData> mDatasToDelete;
+    private Context mContext;
+    private List<FavoriteData> mDatas;
+    private List<FavoriteData> mDatasToDelete;
     private OnClickListener mListener;
 
-    public HistoryAdapter(Context context, List<HistoryData> datas, OnClickListener listener) {
-        mInflater = LayoutInflater.from(context);
+    public FavoriteAdapter(Context context, List<FavoriteData> datas, OnClickListener listener) {
+        mContext = context;
         mDatas = new ArrayList<>(datas);
         mDatasToDelete = new ArrayList<>();
         mListener = listener;
     }
 
-    public void onItemRemoved(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView) {
-        final int position = viewHolder.getAdapterPosition();
-        final HistoryData data = mDatas.get(position);
+    public void onItemMoved(int fromPosition, int toPosition) {
+        notifyItemMoved(fromPosition, toPosition);
+        long fromId = mDatas.get(fromPosition).id;
+        long toId = mDatas.get(toPosition).id;
 
-        Snackbar.make(recyclerView, "removed", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDatas.add(position, data);
-                        notifyItemInserted(position);
-                        mDatasToDelete.remove(data);
-                    }
-                }).show();
-        mDatas.remove(position);
-        notifyItemRemoved(position);
-        mDatasToDelete.add(data);
+        new FavoriteDBManager(mContext).replace(fromId, toId);
     }
 
     public void deleteList(Context context) {
-        HistoryDBManager dbManager = new HistoryDBManager(context);
-        for (HistoryData data : mDatasToDelete) {
+        FavoriteDBManager dbManager = new FavoriteDBManager(context);
+        for (FavoriteData data : mDatasToDelete) {
             dbManager.deleteAt(data.id);
         }
     }
@@ -67,18 +54,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             return;
         }
 
-        final HistoryData data = mDatas.get(position);
-        View itemView = holder.itemView;
-        itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mListener != null) {
-                    mListener.onItemLongClick(position);
-                }
-                return true;
-            }
-        });
-        itemView.setOnClickListener(new View.OnClickListener() {
+        final FavoriteData data = mDatas.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
@@ -106,7 +83,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.layout_history_item, parent, false));
+        return new ViewHolder(
+                LayoutInflater.from(mContext).inflate(R.layout.layout_history_item, parent, false));
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

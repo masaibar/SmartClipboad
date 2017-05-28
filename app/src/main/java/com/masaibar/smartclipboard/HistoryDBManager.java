@@ -9,10 +9,10 @@ import com.masaibar.smartclipboard.utils.ThreadUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClipboardDBManager {
+public class HistoryDBManager {
     private Context mContext;
 
-    public ClipboardDBManager(Context context) {
+    public HistoryDBManager(Context context) {
         mContext = context;
     }
 
