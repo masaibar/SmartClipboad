@@ -2,6 +2,9 @@
 <manifest package="com.masaibar.smartclipboard"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <!--todo 縦横画面対応-->
     <application
         android:name=".App"
@@ -19,12 +22,20 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".views.DetailTextActivity"/>
+
         <service
-            android:name=".services.ClipboardObserverService"
+            android:name=".services.ClipboardWatcherService"
             android:exported="false"/>
 
-        <activity android:name=".views.DetailTextActivity">
-        </activity>
+        <receiver
+            android:name=".receivers.BootCompletedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
