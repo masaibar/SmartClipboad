@@ -17,7 +17,7 @@ public class ClipboardUtil {
         mManager.addPrimaryClipChangedListener(listener);
     }
 
-    public void copyToClipboard(String text) {
+    public synchronized void copyToClipboard(String text) {
         if (TextUtils.isEmpty(text)) {
             return;
         }

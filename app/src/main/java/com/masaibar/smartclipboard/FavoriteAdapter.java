@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.masaibar.smartclipboard.entities.FavoriteData;
-import com.masaibar.smartclipboard.utils.DebugUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +21,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         void onCopyClick(int position);
     }
 
-    private LayoutInflater mInflater;
+    private Context mContext;
     private List<FavoriteData> mDatas;
     private List<FavoriteData> mDatasToDelete;
     private OnClickListener mListener;
 
     public FavoriteAdapter(Context context, List<FavoriteData> datas, OnClickListener listener) {
-        mInflater = LayoutInflater.from(context);
+        mContext = context;
         mDatas = new ArrayList<>(datas);
         mDatasToDelete = new ArrayList<>();
         mListener = listener;
@@ -36,10 +35,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     public void onItemMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
-        DebugUtil.log("!!!", String.format("%s => %s", fromPosition, toPosition));
+        long fromId = mDatas.get(fromPosition).id;
+        long toId = mDatas.get(toPosition).id;
 
-        //todo dbの並び替え実装
-        //todo idを詰める処理
+        new FavoriteDBManager(mContext).replace(fromId, toId);
     }
 
     public void deleteList(Context context) {
@@ -84,7 +83,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.layout_history_item, parent, false));
+        return new ViewHolder(
+                LayoutInflater.from(mContext).inflate(R.layout.layout_history_item, parent, false));
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
