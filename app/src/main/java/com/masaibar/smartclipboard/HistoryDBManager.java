@@ -1,9 +1,11 @@
 package com.masaibar.smartclipboard;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.masaibar.smartclipboard.entities.HistoryData;
+import com.masaibar.smartclipboard.entities.OrmaDatabase;
 import com.masaibar.smartclipboard.utils.ThreadUtil;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class HistoryDBManager {
         ThreadUtil.runOnBackgroundThread(new Runnable() {
             @Override
             public void run() {
-                App.getOrma(mContext).insertIntoHistoryData(data);
+                getOrma().insertIntoHistoryData(data);
             }
         });
     }
@@ -37,7 +39,7 @@ public class HistoryDBManager {
         ThreadUtil.runOnBackgroundThread(new Runnable() {
             @Override
             public void run() {
-                App.getOrma(mContext).deleteFromHistoryData().idEq(id).execute();
+                getOrma().deleteFromHistoryData().idEq(id).execute();
             }
         });
     }
@@ -47,8 +49,18 @@ public class HistoryDBManager {
      */
     public ArrayList<HistoryData> getAll() {
         List<HistoryData> datas =
-                App.getOrma(mContext).selectFromHistoryData().orderByIdDesc().toList();
+                getOrma().selectFromHistoryData().orderByIdDesc().toList();
 
         return new ArrayList<>(datas);
+    }
+
+    @Nullable
+    public String getLatestText() {
+        HistoryData data = getOrma().selectFromHistoryData().orderByIdDesc().getOrNull(0);
+        return data == null ? null : data.text;
+    }
+
+    private OrmaDatabase getOrma() {
+        return App.getOrma(mContext);
     }
 }

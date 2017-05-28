@@ -8,20 +8,20 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.masaibar.smartclipboard.HistoryDBManager;
 import com.masaibar.smartclipboard.ClipboardTextGetter;
+import com.masaibar.smartclipboard.HistoryDBManager;
 import com.masaibar.smartclipboard.notifications.ResidentNotification;
 import com.masaibar.smartclipboard.utils.ClipboardUtil;
 
 
-public class ClipboardObserverService extends Service {
+public class ClipboardWatcherService extends Service {
 
     public static void start(Context context) {
-        context.startService(new Intent(context, ClipboardObserverService.class));
+        context.startService(new Intent(context, ClipboardWatcherService.class));
     }
 
     public static void stop(Context context) {
-        context.stopService(new Intent(context, ClipboardObserverService.class));
+        context.stopService(new Intent(context, ClipboardWatcherService.class));
     }
 
     @Nullable
@@ -46,9 +46,30 @@ public class ClipboardObserverService extends Service {
                         }
 
                         new HistoryDBManager(context).save(text);
-                        new ResidentNotification(context)
-                                .notifyIfNeeded(String.valueOf(text.length()), text);
+                        notifyIfNeeded(text);
                     }
                 });
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            return START_STICKY;
+        }
+
+        String text = new HistoryDBManager(getApplicationContext()).getLatestText();
+
+        if (TextUtils.isEmpty(text)) {
+            return START_STICKY;
+        }
+
+        notifyIfNeeded(text);
+
+        return START_STICKY;
+    }
+
+    private void notifyIfNeeded(String text) {
+        new ResidentNotification(getApplicationContext())
+                .notifyIfNeeded(String.valueOf(text.length()), text);
     }
 }
