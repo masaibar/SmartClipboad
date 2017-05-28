@@ -31,6 +31,7 @@ public class FavoritesFragment extends Fragment {
     }
 
     private FavoriteAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     public FavoritesFragment() {
     }
@@ -45,6 +46,12 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateRecyclerView();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         if (mAdapter != null) {
@@ -54,27 +61,9 @@ public class FavoritesFragment extends Fragment {
 
     private void setupRecyclerView(final View view) {
         final Context context = getContext();
-        final RecyclerView recyclerView =
-                (RecyclerView) view.findViewById(R.id.recycler_view_favorite);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        final List<FavoriteData> datas =
-                new FavoriteDBManager(getContext()).getAll();
-        mAdapter = new FavoriteAdapter(context, datas, new FavoriteAdapter.OnClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                DetailTextActivity.start(context, datas.get(position).text);
-            }
-
-            @Override
-            public void onCopyClick(int position) {
-                new ClipboardUtil(context).copyToClipboard(datas.get(position).text);
-            }
-        });
-
-        recyclerView.addItemDecoration(new Divider(context).get());
-        recyclerView.setAdapter(mAdapter);
-
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_favorite);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        updateRecyclerView();
         ItemTouchHelper touchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
                     @Override
@@ -95,6 +84,26 @@ public class FavoritesFragment extends Fragment {
                     }
                 }
         );
-        touchHelper.attachToRecyclerView(recyclerView);
+        touchHelper.attachToRecyclerView(mRecyclerView);
+    }
+
+    private void updateRecyclerView() {
+        final Context context = getContext();
+        final List<FavoriteData> datas =
+                new FavoriteDBManager(getContext()).getAll();
+        mAdapter = new FavoriteAdapter(context, datas, new FavoriteAdapter.OnClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                DetailTextActivity.start(context, datas.get(position).text);
+            }
+
+            @Override
+            public void onCopyClick(int position) {
+                new ClipboardUtil(context).copyToClipboard(datas.get(position).text);
+            }
+        });
+
+        mRecyclerView.addItemDecoration(new Divider(context).get());
+        mRecyclerView.setAdapter(mAdapter);
     }
 }

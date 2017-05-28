@@ -24,7 +24,13 @@ public class DetailTextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_text);
 
-        ((TextView) findViewById(R.id.text_target)).setText(getText(getIntent()));
+        setupViews();
+    }
+
+    private void setupViews() {
+        String text = getText(getIntent());
+        ((TextView) findViewById(R.id.text_target)).setText(text);
+        setupFavorite(text);
     }
 
     private String getText(Intent intent) {
@@ -33,5 +39,11 @@ public class DetailTextActivity extends AppCompatActivity {
         }
 
         return intent.getStringExtra(KEY_TEXT);
+    }
+
+    private void setupFavorite(String text) {
+        FavoriteToggle toggle = (FavoriteToggle) findViewById(R.id.favorite_toggle);
+        toggle.init(text);
+
     }
 }
