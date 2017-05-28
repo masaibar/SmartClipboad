@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.masaibar.smartclipboard.entities.FavoriteData;
 import com.masaibar.smartclipboard.entities.OrmaDatabase;
-import com.masaibar.smartclipboard.utils.DebugUtil;
 import com.masaibar.smartclipboard.utils.ThreadUtil;
 
 import java.util.ArrayList;
