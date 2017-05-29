@@ -24,13 +24,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         void onCopyClick(int position);
     }
 
-    private LayoutInflater mInflater;
+    private Context mContext;
     private List<HistoryData> mDatas;
     private List<HistoryData> mDatasToDelete;
     private OnClickListener mListener;
 
     public HistoryAdapter(Context context, List<HistoryData> datas, OnClickListener listener) {
-        mInflater = LayoutInflater.from(context);
+        mContext = context;
         mDatas = new ArrayList<>(datas);
         mDatasToDelete = new ArrayList<>();
         mListener = listener;
@@ -40,8 +40,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         final int position = viewHolder.getAdapterPosition();
         final HistoryData data = mDatas.get(position);
 
-        Snackbar.make(recyclerView, "removed", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+        Snackbar.make(recyclerView, mContext.getString(R.string.removed), Snackbar.LENGTH_LONG)
+                .setAction(mContext.getString(R.string.undo), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mDatas.add(position, data);
@@ -106,7 +106,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.layout_history_item, parent, false));
+        return new ViewHolder(
+                LayoutInflater.from(mContext).inflate(R.layout.layout_history_item, parent, false));
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
