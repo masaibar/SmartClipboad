@@ -3,6 +3,6 @@
     <string name="app_name">SmartClipboard</string>
 
     <!--common-->
-    <string name="undo">undo</string>
-    <string name="removed">removed</string>
+    <string name="undo">元に戻す</string>
+    <string name="removed">削除されました</string>
 </resources>
